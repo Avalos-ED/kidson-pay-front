@@ -1,0 +1,32 @@
+<mat-sidenav-container>
+    <mat-sidenav opened mode="side" [style.width]="width"> 
+        <div class="sidenav-header">
+            <img 
+                [width]="profilesPicSize" 
+                [height]="profilesPicSize" 
+                src="../../../assets/img/kidson-pay.png"
+            />
+            <div class="header-text" [class.hide-header-text]="collapsed">
+                <h2>Nerix System</h2>
+                <p>Kidson Pay</p>
+            </div>
+        </div>
+        <mat-nav-list>
+            <a 
+            class="menu-item"
+                mat-list-item 
+                *ngFor="let item of menuItems()" 
+                [routerLink]="item.route"
+                routerLinkActive="selected-menu-item"
+                #rla="routerLinkActive"
+                [activated]="rla.isActive"
+            >
+                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                <span matListItemTitle *ngIf="!collapsed">{{ item.label }}</span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="content" [style.margin-left]="width">
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

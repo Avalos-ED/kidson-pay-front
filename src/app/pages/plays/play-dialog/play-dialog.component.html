@@ -1,0 +1,310 @@
+<h2 class="title-text" mat-dialog-title>Juego {{data.name}}</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>Datos Generales</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Consecutivo</mat-label>
+                  <input matInput placeholder="Consecutivo">
+                  <!--<input matInput [(ngModel)]="data.animal">-->
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Denominación</mat-label>
+                  <input matInput placeholder="Denominación">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Tipo</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Punto de Venta</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field class="full-width-textarea">
+                  <mat-label>Descripción</mat-label>
+                  <textarea matInput placeholder="Descripción"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field color="accent">
+                  <mat-label>Fecha alta</mat-label>
+                  <input matInput [matDatepicker]="picker1">
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Drédito inicial</mat-label>
+                  <input matInput placeholder="Drédito inicial">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>No. Serie</mat-label>
+                  <input matInput placeholder="No. Serie">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Token</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Estado</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Documentos</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>Datos de Compra</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Proveedor</mat-label>
+                  <input matInput placeholder="Proveedor">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>País Origen</mat-label>
+                  <input matInput placeholder="País Origen">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Subtotal</mat-label>
+                  <input matInput placeholder="Subtotal">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Envió</mat-label>
+                  <input matInput placeholder="Envió">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field color="accent">
+                  <mat-label>Fecha</mat-label>
+                  <input matInput [matDatepicker]="picker2">
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Total</mat-label>
+                  <input matInput placeholder="Total">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <mat-form-field class="full-width-textarea">
+              <mat-label>Obervaciones</mat-label>
+              <textarea matInput placeholder="Obervaciones"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>Datos Contables</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Inmovilizado</mat-label>
+                  <input matInput placeholder="Inmovilizado">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Centro de Costo</mat-label>
+                  <input matInput placeholder="Centro de Costo">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Centro Beneficio</mat-label>
+                  <input matInput placeholder="Centro Beneficio">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Valor adquisición</mat-label>
+                  <input matInput placeholder="Valor adquisición">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Depreciación</mat-label>
+                  <input matInput placeholder="Depreciación">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Valor Contable</mat-label>
+                  <input matInput placeholder="Valor Contable">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Creditos Acumolados</mat-label>
+                  <input matInput placeholder="Creditos Acumolados">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Comisión (%)</mat-label>
+                  <input matInput placeholder="Comisión (%)">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Vida Útil en Meses</mat-label>
+                  <input matInput placeholder="Vida Útil en Meses">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>Ubicación</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Código Postal</mat-label>
+                  <input matInput placeholder="Código Postal">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Estado</mat-label>
+                  <input matInput placeholder="Estado">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Municipio</mat-label>
+                  <input matInput placeholder="Municipio">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>No. Exterior</mat-label>
+                  <input matInput placeholder="No. Exterior">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Ciudad</mat-label>
+                  <input matInput placeholder="Ciudad">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Descripsión</mat-label>
+                  <mat-select>
+                    <mat-option></mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>ID</mat-label>
+                  <input matInput placeholder="ID">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Asentamiento</mat-label>
+                  <input matInput placeholder="Asentamiento">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>No. Interior</mat-label>
+                  <input matInput placeholder="No. Interior">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Referencias</mat-label>
+                  <input matInput placeholder="Referencias">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <mat-form-field class="full-width-textarea">
+              <mat-label>Comentarios</mat-label>
+              <textarea matInput placeholder="Comentarios"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <div class="button-dialog">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
+  </div>
+</mat-dialog-actions>
