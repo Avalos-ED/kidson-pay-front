@@ -6,3 +6,8 @@
 .example-disabled {
   display: inline-block;
 }
+
+.accion {
+  width: 160px;
+  text-align: center;
+}

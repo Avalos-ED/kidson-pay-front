@@ -2,13 +2,51 @@
 <mat-card>
     <mat-card-content>
         <div class="example-button-row">
-            <button 
-            mat-icon-button 
-            matTooltip="Add play" 
-            aria-label="Example icon-button with a heart icon"
-            (click)="openDialog()">
+            <button mat-icon-button matTooltip="Add play" aria-label="Example icon-button with a heart icon"
+                (click)="openDialog(false)">
                 <mat-icon>add</mat-icon>
             </button>
         </div>
+    </mat-card-content>
+</mat-card>
+<br>
+<mat-card>
+    <mat-card-content>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            @for (column of columnsToDisplay; track column; let idx = $index) {
+            <ng-container [matColumnDef]="column">
+                <th [class.accion]="idx === 0" mat-header-cell *matHeaderCellDef> 
+                    {{ displayedColumns[idx] }}
+                </th>
+                <th [class.accion]="idx !== 0" mat-header-cell *matHeaderCellDef> 
+                    {{ displayedColumns[idx] }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="idx === 0">
+                        <div class="row" style="display:flex; flex-wrap:wrap; justify-content:center;">
+                            <div class="col" style="width:50px;">
+                                <button mat-icon-button class="example-icon favorite-icon"
+                                    aria-label="Example icon-button with heart icon"
+                                    (click)="openDialog(element)">
+                                    <mat-icon>mode_edit</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col" style="width:50px;">
+                                <button mat-icon-button class="example-icon favorite-icon"
+                                    aria-label="Example icon-button with heart icon">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container> {{element[column]}} </ng-container>
+                </td>
+            </ng-container>
+            }
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+        </table>
     </mat-card-content>
 </mat-card>

@@ -1,1 +1,37 @@
-<p>login works!</p>
+<div style="padding: 20px; background-color: #3f51b5; height: 100%">
+  <mat-card appearance="outlined" style="max-width: 40%; display: flex; flex-direction: column; margin: 100px auto;">
+    <mat-card-content>
+      <form autocomplete="off" 
+            [formGroup]="loginForm" 
+            (ngSubmit)="login()">
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <mat-label>Email</mat-label>
+            <input matInput 
+                    placeholder="Username or email" 
+                    formControlName="email" />
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-icon matSuffix>password</mat-icon>
+            <mat-label>Password</mat-label>
+            <input matInput 
+                    type="password" 
+                    placeholder="Password" 
+                    formControlName="password" />
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <button mat-raised-button color="primary" (click)="login()">
+            Login
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+  
