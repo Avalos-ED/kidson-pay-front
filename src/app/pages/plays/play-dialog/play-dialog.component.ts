@@ -17,6 +17,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import Swal from 'sweetalert2';
+import { QrCodeModule } from 'ng-qrcode';
 
 import { TipoService } from '../../../services/tipo.service';
 import { PuntoVentaService } from '../../../services/punto-venta.service';
@@ -36,6 +37,8 @@ import { Tipo } from '../../../models/tipo.model';
 import { PuntoVenta } from '../../../models/puntoVenta.model';
 import { CentroCosto as CentroCostoM  } from '../../../models/centroCosto.model';
 import { CodigoPostal as CodigoPostalM } from '../../../models/codigoPostal.model';
+import { FileUploadService } from '../../../services/file-upload.service';
+import { Usuario } from '../../../models/usuario.model';
 
 const base_url = environment.base_url;
 
@@ -61,6 +64,7 @@ const base_url = environment.base_url;
     MatGridListModule,
     MatIconModule,
     ReactiveFormsModule,
+    QrCodeModule,
   ],
   templateUrl: './play-dialog.component.html',
   styleUrl: './play-dialog.component.css'
@@ -73,6 +77,12 @@ export class PlayDialogComponent implements OnInit {
   public puntoVentaM = new PuntoVenta();
   public centroCostoM = new CentroCostoM();
   public codigoPostalM = new CodigoPostalM();
+  public usuario = new Usuario();
+  public imagenSubir!: File;
+  public documentoSubir!: File;
+  fileName = '';
+
+  linkQr!: string;
 
   estadoJuego?: string;
   tipoJuego?: string;
@@ -80,6 +90,7 @@ export class PlayDialogComponent implements OnInit {
   fechaAlta?: Date;
   fecha?: Date;
   centroCosto?: string;
+  isDownload: boolean = true;
 
   tokens: Token[] = [
     {opc: 'opc1', numero: '1'},
@@ -93,6 +104,7 @@ export class PlayDialogComponent implements OnInit {
   centrosCosto: any;
   codigosPostal: any;
 
+  centroCostoS = new CodigoPostalM();
   consecutivo?: string;
   centroBeneficio?: string;
   cPostal?: string;
@@ -102,7 +114,8 @@ export class PlayDialogComponent implements OnInit {
   ciudad?: string;
   municipio?: string;
   dTipoAsenta?: string;
-  public imgUrl?: string;
+  imgUrl!: string;
+  archivoUrl!: string;
 
   constructor(public dialogRef: MatDialogRef<PlayDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Juego,
@@ -112,40 +125,12 @@ export class PlayDialogComponent implements OnInit {
     private centroCostosService: CentroCostoService,
     private codigoPostalService: CodigoPostalService,
     private juegoService: JuegoService,
+    private fileUpload: FileUploadService
     ){
     }
 
   ngOnInit(): void {
-    
-    if(this.data){
-      console.log("Elemento:", this.data);
-      this.consecutivo = this.data.consecutivo;
-      this.estadoM = this.data.estado as Estado;
-      this.tipoM = this.data.tipo as Tipo;
-      this.puntoVentaM = this.data.puntoVenta as PuntoVenta;
-      this.centroCostoM = this.data.centroCosto as CentroCostoM;
-      this.codigoPostalM = this.data.codigoPostal as CodigoPostalM;
-      this.cPostal = this.codigoPostalM.d_codigo;
-      console.log("Cdigo postal: ", this.codigoPostalM);
-      this.getCodigoPosta();
-      this.juego = this.data;
-      this.estadoJuego = this.estadoM._id;
-      this.tipoJuego = this.tipoM._id;
-      this.puntoVentaJuego = this.puntoVentaM._id;
-      let fechaSpl = this.data.fechaAlta?.split('-') || '';
-      let fechaCast = new Date(Number(fechaSpl[2]), Number(fechaSpl[1]), Number(fechaSpl[0]));
-      this.fechaAlta = fechaCast;
-      fechaSpl = this.data.fecha?.split('-') || '';
-      console.log("fecha split", fechaSpl);
-      fechaCast = new Date(Number(fechaSpl[2]), Number(fechaSpl[1]), Number(fechaSpl[0]));
-      this.fecha = fechaCast;
-      this.juego.centroCosto = this.centroCostoM.centroCosto;
-      this.centroBeneficio = this.centroCostoM.centroBeneficio;
-      this.juego.codigoPostal = this.codigoPostalM._id;
-      this.tipoAsenta = this.codigoPostalM.d_tipo_asenta;
-    }
-    this.imgUrl = `${ base_url }/upload/juego/no-image`;
-    
+    this.linkQr= 'Prueba del qr';
     //Tipos
     this.tipoService.getTipos()
     .subscribe({
@@ -189,6 +174,48 @@ export class PlayDialogComponent implements OnInit {
           Swal.fire('Error', error.error.msg, 'error');
             }
       });
+
+      if(this.data){
+        console.log("Elemento:", this.data);
+        this.consecutivo = this.data.consecutivo;
+        this.estadoM = this.data.estado as Estado;
+        this.tipoM = this.data.tipo as Tipo;
+        this.puntoVentaM = this.data.puntoVenta as PuntoVenta;
+        this.centroCostoM = this.data.centroCosto as CentroCostoM;
+        this.codigoPostalM = this.data.codigoPostal as CodigoPostalM;
+        //this.usuario = this.data.usuario as Usuario;
+        this.cPostal = this.codigoPostalM.d_codigo;
+        console.log("Cdigo postal: ", this.codigoPostalM);
+        this.getCodigoPosta();
+        this.juego = this.data;
+        this.estadoJuego = this.estadoM._id;
+        this.tipoJuego = this.tipoM._id;
+        this.puntoVentaJuego = this.puntoVentaM._id;
+        let fechaSpl = this.data.fechaAlta?.split('-') || '';
+        let fechaCast = new Date(Number(fechaSpl[2]), Number(fechaSpl[1]), Number(fechaSpl[0]));
+        this.fechaAlta = fechaCast;
+        fechaSpl = this.data.fecha?.split('-') || '';
+        console.log("fecha split", fechaSpl);
+        fechaCast = new Date(Number(fechaSpl[2]), Number(fechaSpl[1]), Number(fechaSpl[0]));
+        this.fecha = fechaCast;
+        this.juego.centroCosto = this.centroCostoM._id;
+        //this.centroCostoS._id = this.centroCostoM._id;
+        this.centroBeneficio = this.centroCostoM.centroBeneficio;
+        this.juego.codigoPostal = this.codigoPostalM._id;
+        this.tipoAsenta = this.codigoPostalM.d_tipo_asenta;
+        if (this.data.imgMontable !== ''){
+          this.imgUrl = `${ base_url }/upload/juego/${this.data.imgMontable}`;
+        } else {
+          this.imgUrl = `${ base_url }/upload/juego/no-image`;
+        }
+        this.archivoUrl = this.data.documento!;
+        this.isDownload = false;
+      } else {
+        this.imgUrl = `${ base_url }/upload/juego/no-image`;
+        this.isDownload = true;
+      }
+      console.log("isDownload:", this.isDownload);
+      
   }
 
   searchFields(key: KeyboardEvent){
@@ -226,61 +253,133 @@ export class PlayDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  selectCentroCo(centroBeneficio: string){
-    console.log('CentroCosto: ', centroBeneficio);
-    this.centroBeneficio = centroBeneficio;
-    //this.juego.centroCosto = centroCosto._id;
+  selectCentroCo(id: string){
+    console.log("Centro de Costos Select:", id);
+
+    this.centrosCosto.filter((cc:any) => {
+      if ( cc._id === id ){
+        this.centroBeneficio = cc.centroBeneficio;
+      }
+    });
   }
 
   save(){  
-    
-    //this.juego.token = this.juegoForm.get('tokenControl')?.value; //this.tokenControl.value == null ? '' : this.tokenControl.value;
-    this.juego.fechaAlta = formatDate(this.juego.fechaAlta || '','dd-MM-yyyy',"en-US"),
-    this.juego.fecha = formatDate(this.juego.fecha || '','dd-MM-yyyy',"en-US");
-    //this.juego.codigoPostal = this.juegoForm.get('asentaControl')?.value; // this.asentaControl.value == null ? '' : this.asentaControl.value;
-    //this.juego.estado = this.juegoForm.get('estadoControl')?.value; //this.estadoControl.value == null ? '' : this.estadoControl.value;
-    //this.juego.puntoVenta = this.juegoForm.get('puntoVentaControl')?.value; //this.puntoVentaControl.value == null ? '' : this.puntoVentaControl.value;
-    //this.juego.tipo = this.juegoForm.get('tipoControl')?.value; //this.tipoControl.value == null ? '' : this.tipoControl.value;
-    
-    console.log('Fecha Alta', this.fechaAlta);
-    console.log('Req juego', this.juego);
-    console.log('Guardar');
-    /*this.juegoService.crearJuego(this.juego)
-      .subscribe({
-        next: (resp: any) => {
-          console.log('Resp juego', resp);
-        },
-        error: (error) => {
-          Swal.fire('Error', error.error.msg, 'error');
-        }
-      })*/
-  }
-
-  fileChanged(event: any){
-    const files = event.target.files;
-    if (files){
-      console.log('Files', files);
-      this.updateImagen(files, '6670d7082a66c9fe7c296ada');
-      //this.fileChange.emit(files);
+    this.juego.puntoVenta = this.puntoVentaJuego;
+    this.juego.tipo = this.tipoJuego;
+    this.juego.estado = this.estadoJuego;
+    delete this.juego.usuario;
+    if(this.data) {
+      console.log("Juego Editar: ", this.juego);
+      //console.log("Usuario: ", this.usuario);
+      this.juegoService.actualizarJuego(this.juego, this.juego._id || '')
+        .subscribe({
+          next: (resp: any) => {
+            console.log('Resp juego', resp);
+            const { ok, juego } = resp;
+            const juegoResp = juego;
+            console.log('juegoResp', juegoResp);
+            if ( ok ){
+              if (this.imagenSubir !== undefined) {
+                console.log('juegoResp.id', juegoResp._id);
+                this.updateFile( juegoResp._id, 'img');
+              }
+              if (this.documentoSubir !== undefined) {
+                console.log('juegoResp.id', juegoResp._id);
+                this.updateFile( juegoResp._id, 'doc');
+              }
+            }
+            this.dialogRef.close(juegoResp);
+          },
+          error: (error) => {
+            Swal.fire('Error', error.error.msg, 'error');
+          }
+        });
     } else {
-      console.log('sin archivo');
-      
-      //this.fileChange.emit();
+      this.juego.fechaAlta = formatDate(this.fechaAlta || '','dd-MM-yyyy',"en-US"),
+      this.juego.fecha = formatDate(this.fecha || '','dd-MM-yyyy',"en-US");
+      this.juego.imgMontable = '';
+      this.juego.documento = '';
+      console.log('Fecha Alta', this.fechaAlta);
+      console.log('Req juego', this.juego);
+      console.log('Guardar');
+  
+      this.juegoService.crearJuego(this.juego)
+        .subscribe({
+          next: (resp: any) => {
+            console.log('Resp juego', resp);
+            const { ok, juego } = resp;
+            const juegoResp = juego;
+            console.log('juegoResp', juegoResp);
+            if ( ok ){
+              if (this.imagenSubir !== undefined) {
+                console.log('juegoResp.id', juegoResp._id);
+                this.updateFile( juegoResp._id, 'img');
+              }
+              if (this.documentoSubir !== undefined) {
+                console.log('juegoResp.id', juegoResp._id);
+                this.updateFile( juegoResp._id, 'doc');
+              }
+            }
+            this.dialogRef.close(juegoResp);
+          },
+          error: (error) => {
+            Swal.fire('Error', error.error.msg, 'error');
+          }
+        });
     }
   }
 
-  updateImagen(imagen: any, id: string){
-    console.log('imagen', imagen);
-    console.log('id juego: ', id);
-    
-    this.juegoService.subirImagen(imagen, id )
-      .subscribe({
-        next: (resp: any) => {
-          console.log('Resp update imagen', resp);
-        },
-        error: (error) => {
-          Swal.fire('Error', error.error.msg, 'error');
-        }
-      })
+  fileChanged(event: any){
+    this.imagenSubir = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      this.imgUrl  = reader.result as any;
+    }
+    reader.readAsDataURL(this.imagenSubir);
+
+  }
+
+  updateFile(id: string, tipoArchivo: string){
+    if( tipoArchivo === 'img') {
+      this.fileUpload
+      .actualizarArchivo(this.imagenSubir, 'juego', id, tipoArchivo)
+      .then(img => console.log(img));
+    } else if ( tipoArchivo === 'doc') {
+      this.fileUpload
+      .actualizarArchivo(this.documentoSubir, 'juego', id, tipoArchivo)
+      .then(doc => console.log(doc));
+    }
+  }
+
+  onFileSelected(event: any){
+    this.documentoSubir = event.target.files[0];
+    if(this.documentoSubir) {
+      this.fileName = this.documentoSubir.name;
+    }
+  }
+
+  downloadFile(){  
+    if ( this.archivoUrl !== undefined && this.archivoUrl.length > 0) {
+      const fileName = `doc_${ Math.random()}.pdf`;
+      this.fileUpload.getArchivo(this.archivoUrl).subscribe( resp => {
+        this.manageFile(resp, fileName);
+        console.log("Documento descargado");
+      });
+    } else {
+      Swal.fire("Kidson Play", "No existe docuemento adjuntado para este juego");
+    }
+  }
+
+  manageFile(response: any, fileName: string):void {
+    const dataType = response.type;
+    const binaryData = [];
+    binaryData.push(response);
+
+    const filePath = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = filePath;
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
   }
 }

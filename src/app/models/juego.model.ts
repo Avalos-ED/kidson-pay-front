@@ -1,5 +1,7 @@
 export class Juego {
     constructor(
+        public _id?: string,
+        public _v?: string,
         public denominacion?: string | '',
         public descripcionGenerales?: string,
         public fechaAlta?: string,
@@ -31,5 +33,6 @@ export class Juego {
         public puntoVenta?: string,
         public tipo?: string,
         public consecutivo?: string,
+        public usuario?: any,
     ){}
 }

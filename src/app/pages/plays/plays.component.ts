@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PlayDialogComponent } from './play-dialog/play-dialog.component';
 import { JuegoService } from '../../services/juego.service';
 import { CommonModule } from '@angular/common';
+import { Juego } from '../../models/juego.model';
 
 @Component({
   selector: 'app-plays',
@@ -34,24 +35,13 @@ export class PlaysComponent implements OnInit {
   columnsToDisplay: string[] = ['Accion','consecutivo', 'denominacion', 'creditoInicial', 'numeroSerie','inmovilizado',
     'valorAdquisicion','vidaUtil','proveedor','paisOrigen'];
   dataSource?: any;
-  animal?: string;
-  name?: string;
 
   constructor( public dialog: MatDialog,
     private juegoService: JuegoService
   ){}
 
   ngOnInit(): void {
-    this.juegoService.getJuegos()
-        .subscribe({
-          next: (resp: any) => {
-            this.dataSource = resp.juego;
-            console.log('Resp: ', this.dataSource);
-          },
-          error: (error) => {
-            Swal.fire('Error', error.error.msg, 'error');
-          }
-        });
+    this.getJuegos();
   }
 
   openDialog( element: any): void {
@@ -64,8 +54,40 @@ export class PlaysComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      console.log("Result: ", result);
+      if ( result !== undefined) {
+        this.getJuegos();
+      }
     });
+  }
+
+  deleteJuego(element: Juego) {
+    const id: string = element._id!;
+    console.log("Eliminar Juego", element._id);
+    this.juegoService.eliminarJuego(id)
+        .subscribe({
+          next: (resp:any) => {
+            console.log("Resp: ", resp);
+            this.getJuegos();
+            Swal.fire('Kidson Play',resp.msg);
+          },
+          error: (error) => {
+            Swal.fire('Error', error.error.msg, 'error');
+          }
+        })
+  }
+
+  getJuegos() {
+    this.juegoService.getJuegos()
+        .subscribe({
+          next: (resp: any) => {
+            this.dataSource = resp.juego;
+            console.log('Resp: ', this.dataSource);
+          },
+          error: (error) => {
+            Swal.fire('Error', error.error.msg, 'error');
+          }
+        });
   }
 
 }

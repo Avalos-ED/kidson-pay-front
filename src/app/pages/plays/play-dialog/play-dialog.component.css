@@ -11,3 +11,23 @@
   /*padding: 0% 6% 0% 0%;*/
   padding: 0px 49px 0px 0px;
 }
+
+.sizeQr {
+  size: 300;
+}
+
+.file-input {
+  display: none;
+}
+
+.child {
+   /* Center vertically and horizontally */
+   display: flex;
+   justify-content: right;
+   align-items: center
+}
+
+.imagenCard {
+  width: 100%;
+  height: 100%;
+}

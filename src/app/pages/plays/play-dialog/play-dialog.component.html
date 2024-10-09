@@ -76,7 +76,7 @@
           </div>
 
           <div class="row">
-            <div class="col-8">
+            <div class="col-5">
               <div class="row">
                 <mat-form-field>
                   <mat-label>No. Serie</mat-label>
@@ -115,32 +115,82 @@
                     -->
                 </mat-form-field>
               </div>
+
               <div class="row">
-                <mat-form-field class="full-width-textarea">
-                  <mat-label>Descripción</mat-label>
-                  <textarea matInput placeholder="Descripción" [(ngModel)]="this.juego.descripcionGenerales"></textarea>
-                </mat-form-field>
+                <input type="file" class="file-input"
+                  accept=".pdf"
+                  (change)="onFileSelected($event)" #fileUpload>
+
+                <div class="row file-upload" >
+                  <div class="col-9 child" >
+                    {{fileName || "Seleccione un documento."}}
+                  </div>
+                  <div class="col-2" >
+                    <button mat-mini-fab color="primary" class="upload-btn"
+                      (click)="fileUpload.click()">
+                        <mat-icon>attach_file</mat-icon>
+                    </button>
+                  </div>
+                  <div class="col-1">
+                    <button mat-mini-fab color="primary" aria-label="Adjutar documento" (click)="downloadFile()" [disabled]="isDownload">
+                      <mat-icon>file_download</mat-icon>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="col-4">
-              <div class="d-flex justify-content-center row">
-                <img mat-card-xl-image [src]="this.imgUrl" alt="Juego">
-              </div>
-
-              <div class="d-flex justify-content-center row">
-                <input
-                hidden
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                #fileInput
-                (change)="fileChanged($event)"
-              />
-              <button mat-fab aria-label="Adjutar documento" (click)="fileInput.click()">
-                <mat-icon>attach_file</mat-icon>
-              </button>
+            <div class="col-7">
+              <div class="row">
+                <div class="col-6" >
+                  <mat-card class="example-card" appearance="outlined">
+                    <mat-card-header>
+                      <mat-card-subtitle>Codigo QR</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="imgCard">
+                        <qr-code value="{{linkQr}}" 
+                                centerImageSrc="../../../assets/img/kidson-pay-mini.jpg" 
+                                centerImageSize="40"
+                                size="180" 
+                                errorCorrectionLevel="Q" />
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+                <div class="col-6" >
+                  <mat-card class="example-card" appearance="outlined">
+                    <mat-card-header>
+                      <mat-card-subtitle>Imagen del juego</mat-card-subtitle>
+                    </mat-card-header>
+                    <div class="imgCard" style="height: 148px;">
+                      <img class="imagenCard" mat-card-image [src]="this.imgUrl" alt="Juego">
+                    </div>
+                    <mat-card-content>
+                      <div class="d-flex justify-content-center row">
+                        <input
+                          hidden
+                          type="file"
+                          accept=".jpg, .jpeg, .png"
+                          #fileInput
+                          (change)="fileChanged($event)"
+                        />
+                        <button mat-mini-fab color="primary" aria-label="Adjutar documento" (click)="fileInput.click()">
+                          <mat-icon>attach_file</mat-icon>
+                        </button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px;">
+            <mat-form-field class="full-width-textarea">
+              <mat-label>Descripción</mat-label>
+              <textarea matInput placeholder="Descripción" [(ngModel)]="this.juego.descripcionGenerales"></textarea>
+            </mat-form-field>
           </div>
 
         </mat-card-content>
@@ -220,7 +270,7 @@
             <div class="col">
               <mat-form-field>
                 <mat-label>Inmovilizado</mat-label>
-                <input matInput placeholder="Inmovilizado" [(ngModel)]="this.juego.inmovilizado">
+                <input matInput placeholder="Inmovilizado" [(ngModel)]="this.juego.inmovilizado" disabled="true">
               </mat-form-field>
             </div>
             <div class="col">
@@ -238,7 +288,7 @@
                 <mat-select [(ngModel)]="this.juego.centroCosto" (ngModelChange)="this.juego.centroCosto" required  (selectionChange)="selectCentroCo($event.value)">
                   <mat-option>--</mat-option>
                   @for (centroCosto of centrosCosto; track centroCosto) {
-                    <mat-option [value]="centroCosto.centroBeneficio">{{ centroCosto.centroCosto }}</mat-option>
+                    <mat-option [value]="centroCosto._id">{{ centroCosto.centroCosto }}</mat-option>
                   }
                 </mat-select>
                 <!--

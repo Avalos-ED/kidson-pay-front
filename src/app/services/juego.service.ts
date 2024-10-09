@@ -15,44 +15,41 @@ export class JuegoService {
 
   constructor( private http: HttpClient) { }
 
-  getJuegos() {
-    const token = localStorage.getItem('token') || '';
+  get token(): string {
+    return localStorage.getItem('token') || '';
+  }
 
+  getJuegos() {
     return this.http.get(`${ base_url }/juego`, {
       headers: {
-        'x-token': token
+        'x-token': this.token
       }
     });
 
   }
 
   crearJuego(req: any){
-    const token = localStorage.getItem('token') || '';
-
     return this.http.post(`${ base_url }/juego`, req, {
       headers:{
-        'x-token': token
+        'x-token': this.token
       }
     });
   }
 
-  subirImagen( req: any, id: string) {
-    const token = localStorage.getItem('token') || '';
-
-    return this.http.put(`${ base_url }/upload/juego/${ id }`, req, {
-      headers: {
-        'x-token': token
-      }
-    })
-  }
-
-  getImagenMontable(img: string) {
-    const token = localStorage.getItem('token') || '';
-
-    return this.http.get(`${ base_url }/upload/juego/${ img }`,{
-      headers: {
-        'x-token': token
+  actualizarJuego(req: any, id: string){
+    return this.http.put(`${ base_url }/juego/${ id }`, req, {
+      headers:{
+        'x-token': this.token
       }
     });
   }
+
+  eliminarJuego(id: string){
+    return this.http.delete(`${ base_url }/juego/${ id }`, {
+      headers:{
+        'x-token': this.token
+      }
+    });
+  }
+
 }

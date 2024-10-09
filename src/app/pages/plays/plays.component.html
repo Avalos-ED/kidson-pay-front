@@ -2,7 +2,7 @@
 <mat-card>
     <mat-card-content>
         <div class="example-button-row">
-            <button mat-icon-button matTooltip="Add play" aria-label="Example icon-button with a heart icon"
+            <button mat-mini-fab color="primary" matTooltip="Add play" aria-label="Example icon-button with a heart icon"
                 (click)="openDialog(false)">
                 <mat-icon>add</mat-icon>
             </button>
@@ -25,16 +25,17 @@
                 <td mat-cell *matCellDef="let element">
                     <ng-container *ngIf="idx === 0">
                         <div class="row" style="display:flex; flex-wrap:wrap; justify-content:center;">
-                            <div class="col" style="width:50px;">
-                                <button mat-icon-button class="example-icon favorite-icon"
+                            <div class="col" style="display:flex; flex-wrap:wrap; justify-content:center;width:50px;">
+                                <button mat-mini-fab color="primary" class="example-icon favorite-icon"
                                     aria-label="Example icon-button with heart icon"
                                     (click)="openDialog(element)">
                                     <mat-icon>mode_edit</mat-icon>
                                 </button>
                             </div>
-                            <div class="col" style="width:50px;">
-                                <button mat-icon-button class="example-icon favorite-icon"
-                                    aria-label="Example icon-button with heart icon">
+                            <div class="col" style="display:flex; flex-wrap:wrap; justify-content:center;width:50px;">
+                                <button mat-mini-fab color="primary" class="example-icon favorite-icon"
+                                    aria-label="Example icon-button with heart icon"
+                                    (click)="deleteJuego(element)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </div>
